@@ -1,5 +1,6 @@
 var TINDER_HOST = "https://api.gotinder.com/";
 var request = require('request');
+var util = require('util');
 
 /**
  * Constructs a new instance of the TinderClient class
@@ -172,7 +173,7 @@ function TinderClient() {
           callback = makeTinderCallback(callback);
           callback(error, res, body);
         } else if (body.error){
-          throw "Failed to authenticate: " + body.error
+          callback(new AuthError("Failed to authenticate: " + body.error));
         }
       });
   };
@@ -267,7 +268,23 @@ function TinderClient() {
       null,
       makeTinderCallback(callback));
   };
-  
+
 }
 
+/**
+ * Constructs a new instance of the AuthError class
+ *
+ * @constructor
+ * @this {AuthError}
+ */
+function AuthError(message, extra) {
+    Error.captureStackTrace && Error.captureStackTrace(this, this.constructor);
+    this.name = this.constructor.name;
+    this.message = message;
+    this.extra = extra;
+};
+
+util.inherits(AuthError, Error);
+
 exports.TinderClient = TinderClient;
+exports.AuthError = AuthError;
