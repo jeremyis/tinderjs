@@ -268,7 +268,15 @@ function TinderClient() {
       null,
       makeTinderCallback(callback));
   };
-
+  /**
+   * Get profile for current logged in user.
+   * @param {Function} callback the callback to invoke when the request completes
+   */
+  this.getProfile = function(callback) {
+    tinderGet('profile',
+      null,
+      makeTinderCallback(callback));
+  }
 }
 
 /**
